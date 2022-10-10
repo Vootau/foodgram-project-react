@@ -149,14 +149,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            current_ingredient = ingredient["id"]
-            if IngredientInRecipe.objects.filter(
-                ingredient=current_ingredient,
-                recipe=recipe,
-            ).exists():
-                raise serializers.ValidationError(
-                    'Check that the ingredients are not repeated'
-                )
+            current_ingredient = Ingredient.objects.get_or_create(ingredient.id)
             IngredientInRecipe.objects.create(
                 ingredient=current_ingredient,
                 recipe=recipe,

@@ -4,7 +4,6 @@ from django.db import models
 
 from colorfield.fields import ColorField
 
-# from users.models import User
 
 User = get_user_model()
 
@@ -49,6 +48,27 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ingredients'
 
 
+class IngredientInRecipe(models.Model):
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name='ingredient_to_recipe'
+    )
+    amount = models.PositiveSmallIntegerField(
+        verbose_name='Ingredients amount',
+        validators=(
+            MinValueValidator(1, 'Minimal ingredients amount is one'),
+        ),
+    )
+
+    def __str__(self):
+        return f' {self.ingredient} - {self.amount}'
+
+    class Meta:
+        verbose_name = 'Ingredient in recipe'
+        verbose_name_plural = 'Ingredients in recipe'
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,
@@ -80,11 +100,11 @@ class Recipe(models.Model):
         Tag,
         verbose_name='Tags',
         related_name='recipes')
-    ingredients = models.ManyToManyField(
-        Ingredient,
+    ingredients = models.ForeignKey(
+        IngredientInRecipe,
+        on_delete=models.CASCADE,
         verbose_name='Ingredients',
         related_name='recipes',
-        through='IngredientInRecipe',
     )
 
     def recipe_count(self):
@@ -97,38 +117,6 @@ class Recipe(models.Model):
         ordering = ['-id']
         verbose_name = 'Recipe'
         verbose_name_plural = 'Recipes'
-
-
-class IngredientInRecipe(models.Model):
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='ingredient_to_recipe'
-    )
-    ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.CASCADE,
-        related_name='ingredient_to_recipe'
-    )
-    amount = models.PositiveSmallIntegerField(
-        verbose_name='Ingredients amount',
-        validators=(
-            MinValueValidator(1, 'Minimal ingredients amount is one'),
-        ),
-    )
-
-    def __str__(self):
-        return f'{self.recipe} - {self.ingredient}'
-
-    class Meta:
-        verbose_name = 'Ingredient in recipe'
-        verbose_name_plural = 'Ingredients in recipe'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['ingredient', 'recipe'],
-                name='unique_ingredient_in_recipe'
-            )
-        ]
 
 
 class Favorite(models.Model):
