@@ -9,7 +9,6 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    ordering = ['-id']
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -29,6 +28,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        ordering = ['-id']
 
 
 class Ingredient(models.Model):

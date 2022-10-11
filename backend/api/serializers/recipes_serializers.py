@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from api.serializers.users_serializers import UserSerializer
@@ -149,10 +150,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            current_ingredient = Ingredient.objects.get_or_create(ingredient.id)
-            IngredientInRecipe.objects.create(
+            current_ingredient = get_object_or_404(ingredient)
+            IngredientInRecipe.objects.get_or_create(
                 ingredient=current_ingredient,
-                recipe=recipe,
                 amount=ingredient["amount"],
             )
 
@@ -162,7 +162,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop("ingredient_to_recipe")
         recipe = Recipe.objects.create(**validated_data, author=author)
         for tag in tags:
-            recipe.tags.add(tag)
+            recipe.tags.set(tag)
         self.create_ingredients(ingredients, recipe)
         return recipe
 
