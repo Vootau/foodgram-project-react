@@ -46,7 +46,7 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
-    pagination_class = None
+    pagination_class = LimitPageNumberPagination
     http_method_names = ['get']
 
 
@@ -57,8 +57,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     pagination_class = LimitPageNumberPagination
     filterset_class = RecipeFilter
-    filterset_fields = ('tags', 'author')
     ordering_fields = ('id',)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PATCH']:

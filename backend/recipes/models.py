@@ -100,9 +100,8 @@ class Recipe(models.Model):
         Tag,
         verbose_name='Tags',
         related_name='recipes')
-    ingredients = models.ForeignKey(
+    ingredients = models.ManyToManyField(
         IngredientInRecipe,
-        on_delete=models.CASCADE,
         verbose_name='Ingredients',
         related_name='recipes',
     )
