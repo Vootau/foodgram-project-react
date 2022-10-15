@@ -1,10 +1,8 @@
+from api.serializers.recipes_serializers import FavoriteSerializer
 from django.shortcuts import get_object_or_404
-
+from recipes.models import Recipe
 from rest_framework import status
 from rest_framework.response import Response
-
-from recipes.models import Recipe
-from api.serializers.recipes_serializers import FavoriteSerializer
 
 
 def delete(request, id, model):
@@ -13,17 +11,16 @@ def delete(request, id, model):
     if not model.objects.filter(user=user, recipe=recipe).exists():
         return Response(
             {
-                "errors": "Remove from 'shopping list/favorites' not available"
+                "errors": "Remove from here not available"
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
     obj = get_object_or_404(model, user=user, recipe=recipe)
     obj.delete()
     return Response(
-        {"errors": "Recipe removed successfully from 'shopping list/favorites'."},
+        {"errors": "Recipe removed successfully from here."},
         status=status.HTTP_204_NO_CONTENT,
     )
-
 
 def post(request, id, model):
     user = request.user

@@ -1,12 +1,10 @@
+from api.pagination import LimitPageNumberPagination
+from api.serializers.users_serializers import SubscriptionsSerializer
 from django.shortcuts import get_object_or_404
-
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from users.models import Follow, User
-from api.pagination import LimitPageNumberPagination
-from api.serializers.users_serializers import SubscriptionsSerializer
 
 
 class ListSubscriptions(viewsets.ModelViewSet):
@@ -34,7 +32,8 @@ class Subscribe(APIView):
         subscription = get_object_or_404(Follow, user=user, author=author)
         subscription.delete()
         return Response(
-            {"errors": "Successful resubscription"}, status=status.HTTP_204_NO_CONTENT
+            {"errors": "Successful resubscription"},
+            status=status.HTTP_204_NO_CONTENT
         )
 
     def post(self, request, pk):

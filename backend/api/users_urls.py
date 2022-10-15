@@ -1,8 +1,6 @@
-from django.urls import include, path, re_path
-
-from rest_framework.routers import DefaultRouter
-
 from api.views.users_views import ListSubscriptions, Subscribe
+from django.urls import include, path, re_path
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"", ListSubscriptions, basename="subscriptions")

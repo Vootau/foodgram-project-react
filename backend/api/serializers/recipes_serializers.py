@@ -1,9 +1,6 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-
-from api.serializers.users_serializers import UserSerializer
-
 from api.field_image import Base64ImageField
+from api.serializers.users_serializers import UserSerializer
+from django.shortcuts import get_object_or_404
 from recipes.models import (
     Favorite,
     Ingredient,
@@ -12,6 +9,7 @@ from recipes.models import (
     ShoppingCart,
     Tag
 )
+from rest_framework import serializers
 
 
 class TagSerializer(serializers.ModelSerializer):

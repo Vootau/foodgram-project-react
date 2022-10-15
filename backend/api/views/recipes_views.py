@@ -1,26 +1,6 @@
 import io
 
-from django.db.models import F, Sum
-from django.http import FileResponse
-
-from rest_framework import filters, viewsets
-from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
-
-from django_filters.rest_framework import DjangoFilterBackend
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-
 from api.filters import IngredientSearchFilter, RecipeFilter
-from recipes.models import (
-    Favorite,
-    Ingredient,
-    IngredientInRecipe,
-    Recipe,
-    ShoppingCart,
-    Tag
-)
 from api.pagination import LimitPageNumberPagination
 from api.permissions import OwnerOrReadOnly
 from api.serializers.recipes_serializers import (
@@ -30,6 +10,23 @@ from api.serializers.recipes_serializers import (
     TagSerializer
 )
 from api.utils import delete, post
+from django.db.models import F, Sum
+from django.http import FileResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from recipes.models import (
+    Favorite,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag
+)
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+from rest_framework import filters, viewsets
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 
 
 class TagViewSet(viewsets.ModelViewSet):

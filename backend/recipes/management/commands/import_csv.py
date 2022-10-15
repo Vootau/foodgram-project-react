@@ -9,7 +9,10 @@ class Command(BaseCommand):
     """Uploading data from csv file.
     """
 
-    DEFAULT_FILE_PATH = os.path.join(os.path.abspath('static/data'), 'ingredients.csv')
+    DEFAULT_FILE_PATH = os.path.join(
+        os.path.abspath('static/data'),
+        'ingredients.csv'
+    )
 
     help = 'Upload data fron csv file to table Ingredients.'
 
