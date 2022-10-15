@@ -120,6 +120,10 @@ class Recipe(models.Model):
         ordering = ['-id']
         verbose_name = 'Recipe'
         verbose_name_plural = 'Recipes'
+        constraints = [
+            models.UniqueConstraint(fields=['author', 'recipe'],
+                                    name='unique_recipe')
+        ]
 
 
 class Favorite(models.Model):

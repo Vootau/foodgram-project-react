@@ -1,6 +1,6 @@
 from api.field_image import Base64ImageField
 from api.serializers.users_serializers import UserSerializer
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Tag)
 from rest_framework import serializers
@@ -144,14 +144,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             return True
         return False
 
-    def create_ingredients(self, ingredients, recipe):
+    def create_ingredients(self, ingredients):
         for ingredient in ingredients:
-            # current_ingredient = Ingredient.objects.get_or_create(ingredient)
-            obj = IngredientInRecipe.objects.get_or_create(
+            # current_ingredient
+            IngredientInRecipe.objects.get_or_create(
                 ingredient=ingredient['id'],
                 amount=ingredient["amount"],
             )
-            recipe.ingredients.set(obj)
+            # recipe.ingredients.set(obj)
 
     def create(self, validated_data):
         # author = self.context["request"].user
@@ -161,7 +161,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(**validated_data)
         for tag in tags:
             recipe.tags.set(tags)
-        self.create_ingredients(ingredients, recipe)
+        self.create_ingredients(ingredients)
         return recipe
 
     def update(self, recipe, validated_data):
