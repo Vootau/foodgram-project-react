@@ -1,3 +1,5 @@
+![Build Status](https://github.com/Vootau/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+
 ### What is about
 
 Project foodgram allow you to watch, create recipes
