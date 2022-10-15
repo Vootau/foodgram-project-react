@@ -107,7 +107,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         IngredientInRecipe,
         verbose_name='Ingredients',
-        related_name='recipes',
+        related_name='recipes'
     )
 
     def recipe_count(self):
