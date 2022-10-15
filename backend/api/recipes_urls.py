@@ -9,8 +9,10 @@ from .views.recipes_views import (
     TagViewSet
 )
 
-router = SimpleRouter()
+# Использовать namespace хорошая практика.
+app_name = 'api'
 
+router = SimpleRouter()
 router.register(r"tags", TagViewSet, basename="tags")
 router.register(r"ingredients", IngredientsViewSet, basename="ingredients")
 router.register(r"recipes", RecipeViewSet, basename="recipes")

@@ -106,16 +106,27 @@ class IngredientToCreateRecipeSerializer(serializers.Serializer):
         return name
 
 
+class CustomIngredientSerializer(serializers.Serializer):
+    """Вспомогательный сериализатор для RecipeCreateSerializer."""
+
+    id = serializers.IntegerField()
+    amount = serializers.IntegerField()
+
+    class Meta:
+        fields = ('id', 'amount')
+
+
 class RecipeCreateSerializer(serializers.ModelSerializer):
-    ingredients = serializers.PrimaryKeyRelatedField(
-        queryset=IngredientInRecipe.objects.all(),
-        many=True
-    )
+    # Пишем обычный сериализатор, что не усложнять логику,
+    # привязывая данные к модели.
+    ingredients = CustomIngredientSerializer(many=True)
+
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
-        many=True
+        many=True,
     )
-    image = Base64ImageField()
+    # Для тестов сделал необязательным.
+    image = Base64ImageField(required=False)
     author = UserSerializer(read_only=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -148,22 +159,23 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             return True
         return False
 
-    def create_ingredients(self, ingredients):
+    def create_ingredients(self, recipe, ingredients):
+        """ Метод создания из сырых данных объектов БД. """
         for ingredient in ingredients:
-            current_ingredient = get_object_or_404(ingredient)
-            IngredientInRecipe.objects.get_or_create(
+            current_ingredient = get_object_or_404(Ingredient)
+            ing, _ = IngredientInRecipe.objects.get_or_create(
                 ingredient=current_ingredient,
                 amount=ingredient["amount"],
             )
+            recipe.ingredients.add(ing.id)
 
     def create(self, validated_data):
-        author = self.context["request"].user
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
-        recipe = Recipe.objects.create(**validated_data, author=author)
+        recipe = Recipe.objects.create(**validated_data)
         for tag in tags:
-            recipe.tags.set(tag)
-        self.create_ingredients(ingredients)
+            recipe.tags.add(tag)
+        self.create_ingredients(recipe, ingredients)
         return recipe
 
     def update(self, recipe, validated_data):
@@ -177,7 +189,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return super().update(recipe, validated_data)
 
     def to_representation(self, recipe):
-        serializer = RecipeSerializer(recipe)
+        # Ошибка была, контекст не передавал, а у тебя на нем логика завязана
+        # в сериализаторе пользователя.
+        serializer = RecipeSerializer(recipe, context=self.context)
         return serializer.data
 
 

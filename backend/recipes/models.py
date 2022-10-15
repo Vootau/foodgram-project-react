@@ -85,9 +85,12 @@ class Recipe(models.Model):
         db_index=True,
         verbose_name='Name',
     )
+    # Можно здесь сделать необязательным, а в сериализаторе обязательным.
     image = models.ImageField(
         verbose_name='Image',
-        upload_to='static/images/'
+        upload_to='static/images/',
+        blank=True,
+        null=True,
     )
     text = models.TextField(
         verbose_name='Description'
