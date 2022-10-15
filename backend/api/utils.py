@@ -22,13 +22,14 @@ def delete(request, id, model):
         status=status.HTTP_204_NO_CONTENT,
     )
 
+
 def post(request, id, model):
     user = request.user
     recipe = get_object_or_404(Recipe, id=id)
     if model.objects.filter(user=user, recipe=recipe).exists():
         return Response(
             {
-                "errors": "Attaching to 'shopping list/favorites' not available"
+                "errors": "Attaching here not available"
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
