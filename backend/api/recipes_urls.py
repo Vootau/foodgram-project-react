@@ -4,6 +4,8 @@ from rest_framework.routers import SimpleRouter
 from .views.recipes_views import (FavoriteView, IngredientsViewSet,
                                   RecipeViewSet, ShoppingCardView, TagViewSet)
 
+app_name = 'api'
+
 router = SimpleRouter()
 
 router.register(r"tags", TagViewSet, basename="tags")

@@ -87,7 +87,9 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         verbose_name='Image',
-        upload_to='static/images/'
+        upload_to='static/images/',
+        blank=True,
+        null=True
     )
     text = models.TextField(
         verbose_name='Description'
@@ -121,7 +123,7 @@ class Recipe(models.Model):
         verbose_name = 'Recipe'
         verbose_name_plural = 'Recipes'
         constraints = [
-            models.UniqueConstraint(fields=['author', 'recipe'],
+            models.UniqueConstraint(fields=['author', 'name'],
                                     name='unique_recipe')
         ]
 

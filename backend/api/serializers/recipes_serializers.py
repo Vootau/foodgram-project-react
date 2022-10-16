@@ -1,6 +1,6 @@
 from api.field_image import Base64ImageField
 from api.serializers.users_serializers import UserSerializer
-# from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Tag)
 from rest_framework import serializers
@@ -97,8 +97,15 @@ class IngredientToCreateRecipeSerializer(serializers.Serializer):
 
     def get_name(self, ingredient):
         name = ingredient.ingredient.name
-        print('hats my name')
         return name
+
+
+class CustomIngredientSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    amount = serializers.IntegerField()
+
+    class Meta:
+        fields = ('id', 'amount')
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -110,7 +117,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
-    ingredients = IngredientToCreateRecipeSerializer(many=True)
+    ingredients = CustomIngredientSerializer(many=True)
     image = Base64ImageField()
     author = UserSerializer(read_only=True, required=False)
     is_favorited = serializers.SerializerMethodField()
@@ -144,24 +151,22 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             return True
         return False
 
-    def create_ingredients(self, ingredients):
+    def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            # current_ingredient
-            IngredientInRecipe.objects.get_or_create(
-                ingredient=ingredient['id'],
+            current_ingredient = get_object_or_404(Ingredient)
+            ing, _ = IngredientInRecipe.objects.get_or_create(
+                ingredient=current_ingredient,
                 amount=ingredient["amount"],
             )
-            # recipe.ingredients.set(obj)
+            recipe.ingredients.set(ing.id)
 
     def create(self, validated_data):
-        # author = self.context["request"].user
         tags = validated_data.pop("tags")
-        print(tags)
         ingredients = validated_data.pop("ingredients")
         recipe = Recipe.objects.create(**validated_data)
         for tag in tags:
             recipe.tags.set(tags)
-        self.create_ingredients(ingredients)
+        self.create_ingredients(ingredients, recipe)
         return recipe
 
     def update(self, recipe, validated_data):
@@ -174,9 +179,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             recipe.tags.set(tags_data)
         return super().update(recipe, validated_data)
 
-    # def to_representation(self, recipe):
-    #     serializer = RecipeSerializer(recipe)
-    #     return serializer.data
+    def to_representation(self, recipe):
+        serializer = RecipeSerializer(recipe, context=self.context)
+        return serializer.data
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
