@@ -109,15 +109,11 @@ class CustomIngredientSerializer(serializers.Serializer):
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
-    # ingredients = serializers.PrimaryKeyRelatedField(
-    #     queryset=IngredientInRecipe.objects.all(),
-    #     many=True
-    # )
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True
     )
-    ingredients = IngredientToCreateRecipeSerializer(many=True)
+    ingredients = CustomIngredientSerializer(many=True)
     image = Base64ImageField()
     author = UserSerializer(read_only=True, required=False)
     is_favorited = serializers.SerializerMethodField()
@@ -153,14 +149,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            print(ingredient)
-            current_ingredient = get_object_or_404(Ingredient)
-            print(current_ingredient)
+            current_ingredient = get_object_or_404(
+                Ingredient.objects.filter(id=ingredient['id'])[:1]
+            )
             ing, _ = IngredientInRecipe.objects.get_or_create(
                 ingredient=current_ingredient,
                 amount=ingredient["amount"],
             )
-            recipe.ingredients.set(ing.id)
+            recipe.ingredients.add(ing.id)
 
     def create(self, validated_data):
         tags = validated_data.pop("tags")
@@ -181,9 +177,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             recipe.tags.set(tags_data)
         return super().update(recipe, validated_data)
 
-    # def to_representation(self, recipe):
-    #     serializer = RecipeSerializer(recipe, context=self.context)
-    #     return serializer.data
+    def to_representation(self, recipe):
+        serializer = RecipeSerializer(recipe, context=self.context)
+        return serializer.data
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
