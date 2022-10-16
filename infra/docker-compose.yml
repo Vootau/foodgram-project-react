@@ -1,4 +1,4 @@
-version: '2.6'
+version: '3.8'
 
 services:
 
@@ -23,7 +23,7 @@ services:
       - ./.env
 
   frontend:
-    image: zapoi/foodgram-frontend:latest
+    image: vootau/foodgram-frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
 
