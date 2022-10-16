@@ -72,12 +72,12 @@ class ShoppingCardView(APIView):
         shopping_list = (
             IngredientInRecipe.objects.filter(
                 recipes__shopping_cart__user=user
-                )
-                .values(
-                    name=F('ingredient__name'),
-                    unit=F('ingredient__measurement_unit')
-                    )
-                    .annotate(amount=Sum('amount'))
+            )
+            .values(
+                name=F('ingredient__name'),
+                unit=F('ingredient__measurement_unit')
+            )
+            .annotate(amount=Sum('amount'))
         )
         font = 'DejaVuSerif'
         pdfmetrics.registerFont(
