@@ -70,7 +70,7 @@ class ShoppingCardView(APIView):
     def get(self, request):
         user = request.user
         shopping_list = (
-            IngredientInRecipe.objects.filter(recipe__shopping_cart__user=user)
+            IngredientInRecipe.objects.filter(recipes__shopping_cart__user=user)
             .values(name=F('ingredient__name'),
                     unit=F('ingredient__measurement_unit'))
             .annotate(amount=Sum('amount'))

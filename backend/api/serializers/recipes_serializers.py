@@ -117,7 +117,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
-    ingredients = CustomIngredientSerializer(many=True)
+    ingredients = IngredientToCreateRecipeSerializer(many=True)
     image = Base64ImageField()
     author = UserSerializer(read_only=True, required=False)
     is_favorited = serializers.SerializerMethodField()
@@ -153,7 +153,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
+            print(ingredient)
             current_ingredient = get_object_or_404(Ingredient)
+            print(current_ingredient)
             ing, _ = IngredientInRecipe.objects.get_or_create(
                 ingredient=current_ingredient,
                 amount=ingredient["amount"],
@@ -179,9 +181,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             recipe.tags.set(tags_data)
         return super().update(recipe, validated_data)
 
-    def to_representation(self, recipe):
-        serializer = RecipeSerializer(recipe, context=self.context)
-        return serializer.data
+    # def to_representation(self, recipe):
+    #     serializer = RecipeSerializer(recipe, context=self.context)
+    #     return serializer.data
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
