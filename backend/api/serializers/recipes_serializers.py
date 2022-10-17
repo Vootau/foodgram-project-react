@@ -72,17 +72,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         return False
 
 
-class IngredientToCreateRecipeSerializer(serializers.Serializer):
-    id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all(), required=True
-    )
+class CustomIngredientSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     amount = serializers.IntegerField(required=True)
     name = serializers.SerializerMethodField()
     measurement_unit = serializers.SerializerMethodField()
 
     class Meta:
         model = IngredientInRecipe
-        fields = ("id", "name", "measurement_unit", "amount")
+        fields = ("id", "amount", 'name', 'measurement_unit')
 
     def validate_amount(self, value):
         if value < 1:
@@ -98,14 +96,6 @@ class IngredientToCreateRecipeSerializer(serializers.Serializer):
     def get_name(self, ingredient):
         name = ingredient.ingredient.name
         return name
-
-
-class CustomIngredientSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    amount = serializers.IntegerField()
-
-    class Meta:
-        fields = ('id', 'amount')
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -171,7 +161,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         if "ingredients" in validated_data:
             ingredients = validated_data.pop("ingredients")
             recipe.ingredients.clear()
-            self.create_ingredients(ingredients)
+            self.create_ingredients(ingredients, recipe)
         if "tags" in validated_data:
             tags_data = validated_data.pop("tags")
             recipe.tags.set(tags_data)
