@@ -66,7 +66,7 @@ Make migrations:
 python manage.py migrate
 ```
 
-Upload ingerdients from .csv file (if nesessary):
+Upload ingerdients and tags from .csv files (if nesessary):
 
 ```
 python manage.py import csv

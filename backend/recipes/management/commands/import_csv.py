@@ -1,37 +1,40 @@
 import os
-from csv import DictReader
+import platform
 
 from django.core.management import BaseCommand
-from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
-    """Uploading data from csv file.
+    """ Загружает все данные из таблиц в базу данных.
+    Названия файлов должны соответствовать CSV_FILE_NAMES.
+    Для загрузки данных нужно указать путь к файлу или
+    загрузка выполнится автоматически из DEFAULT_FILE_PATH.
     """
 
-    DEFAULT_FILE_PATH = os.path.join(
-        os.path.abspath('static/data'),
-        'ingredients.csv'
+    CSV_FILE_NAMES_COMMAND = (
+        ('import_ingredients', 'ingredients.csv'),
+        ('import_tags', 'tags.csv'),
     )
 
-    help = 'Upload data fron csv file to table Ingredients.'
+    DEFAULT_FILE_PATH = os.path.join(
+        os.path.abspath('static'), 'data'
+    )
+
+    help = 'Upload data to ingredients and tags models'
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'file_path', type=str, nargs='?', default=self.DEFAULT_FILE_PATH
+            'file_dir', type=str, nargs='?', default=''
         )
 
     def handle(self, *args, **options):
-        file_path = options['file_path']
-        with open(file_path, encoding='utf-8') as csv_file:
-            reader = DictReader(csv_file)
-            for row in reader:
-                _, created = Ingredient.objects.get_or_create(
-                    name=row['name'],
-                    measurement_unit=row['measurement_unit'],
-                )
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Data from {file_path}  uploaded successfully'
-            )
-        )
+        file_dir = options['file_dir']
+        for command, csv_file in self.CSV_FILE_NAMES_COMMAND:
+            if file_dir:
+                file_path = os.path.join(file_dir, csv_file)
+            else:
+                file_path = ''
+            if platform.system() == 'Windows':
+                os.system(f'python manage.py {command} {file_path}')
+            else:
+                os.system(f'python3 manage.py {command} {file_path}')

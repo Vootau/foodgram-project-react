@@ -35,8 +35,9 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
-    pagination_class = LimitPageNumberPagination
+    # pagination_class = LimitPageNumberPagination
     http_method_names = ['get']
+    ordering_fields = ('id',)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
