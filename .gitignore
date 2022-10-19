@@ -31,7 +31,8 @@ MANIFEST
 frontend/node_modules
 frontend/build
 media/
-static/
+static/admin
+atatic/rest_framework
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

@@ -1,7 +1,7 @@
 ![Build Status](https://github.com/Vootau/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
-
 #### stack
+
 ![Python](https://img.shields.io/badge/Python-3.7.0-blue?style=for-the-badge&logo=python&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Django](https://img.shields.io/badge/Django-3.2.15-orange?style=for-the-badge&logo=django&logoColor=white)
@@ -20,15 +20,14 @@ Project foodgram allow you to watch, create recipes
 subscribe on users (except yourself)
 and download shopping list of ingedients.
 
-### After push command into git repository:
+### After push command into git repository
 
 1. PEP8 check (with Flake8)
 2. Build and push images to dockerhub
 3. Deploy to remote server
 4. Sending message to Telegram if success
 
-
-### How to start project:
+### How to start project
 
 Clone repo and go to directory in command line:
 
@@ -79,6 +78,7 @@ python manage.py runserver
 
 python manage.py createsuperuser
 ```
+
 Server_ip:
 
 ```
