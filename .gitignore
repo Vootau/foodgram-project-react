@@ -31,7 +31,6 @@ MANIFEST
 frontend/node_modules
 frontend/build
 media/
-recipes/
 static/
 
 # PyInstaller
