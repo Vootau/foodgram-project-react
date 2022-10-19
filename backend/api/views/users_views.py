@@ -18,9 +18,9 @@ class ListSubscriptions(viewsets.ModelViewSet):
 
 
 class Subscribe(APIView):
-    def delete(self, request, pk):
+    def delete(self, request, id):
         user = request.user
-        author = get_object_or_404(User, id=pk)
+        author = get_object_or_404(User, id=id)
         if not (
             user == author or Follow.objects.filter(user=user,
                                                     author=author).exists()
@@ -36,9 +36,9 @@ class Subscribe(APIView):
             status=status.HTTP_204_NO_CONTENT
         )
 
-    def post(self, request, pk):
+    def post(self, request, id):
         user = request.user
-        author = get_object_or_404(User, id=pk)
+        author = get_object_or_404(User, id=id)
         if user == author or Follow.objects.filter(user=user,
                                                    author=author).exists():
             return Response(
