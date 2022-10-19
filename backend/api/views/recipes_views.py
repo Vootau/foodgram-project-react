@@ -36,6 +36,7 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
     # pagination_class = LimitPageNumberPagination
+    pagination_class = None
     http_method_names = ['get']
     ordering_fields = ('id',)
 
