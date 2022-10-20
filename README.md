@@ -74,9 +74,9 @@ python manage.py import csv
 Run project:
 
 ```
-python manage.py runserver
-
 python manage.py createsuperuser
+
+python manage.py runserver
 ```
 
 Server_ip:
@@ -85,18 +85,18 @@ Server_ip:
 130.193.54.202
 
 Unauthorized access:
-https://130.193.54.202/api/users/
-https://130.193.54.202/api/recipes/
-https://130.193.54.202/api/ingredients/
+http://130.193.54.202/api/users/
+http://130.193.54.202/api/recipes/
+http://130.193.54.202/api/ingredients/
 
 Register:
-https://130.193.54.202/api/users/ [Method: POST]
+http://130.193.54.202/api/users/ [Method: POST]
 
 Sign in:
-https://130.193.54.202/api/auth/token/login
+http://130.193.54.202/api/auth/token/login
 
 Admin:
-https://130.193.54.202/admin/
+http://130.193.54.202/admin/
 
 login : admin
 pswd : qxezwc123
