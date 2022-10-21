@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from .views.recipes_views import (IngredientsViewSet, RecipeViewSet,
-                                  ShoppingCardView, TagViewSet, FavoriteView)
+from .views.recipes_views import (FavoriteView, IngredientsViewSet,
+                                  RecipeViewSet, ShoppingCardView, TagViewSet)
 
 app_name = 'api'
 
