@@ -84,6 +84,9 @@ Server_ip:
 ```
 130.193.54.202
 
+Api documentation:
+http://130.193.54.202/api/docss/
+
 Unauthorized access:
 http://130.193.54.202/api/users/
 http://130.193.54.202/api/recipes/
