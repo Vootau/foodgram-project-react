@@ -18,7 +18,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import filters, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
 
@@ -36,7 +36,6 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
-    # pagination_class = LimitPageNumberPagination
     pagination_class = None
     http_method_names = ['get']
     ordering_fields = ('id',)
@@ -60,13 +59,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'GET':
             return RecipeSerializer
 
-
-# class FavoriteView(APIView):
-#     def delete(self, request, id):
-#         return delete(request, id, Favorite)
-
-#     def post(self, request, id):
-#         return post(request, id, Favorite)
     @action(
         detail=True,
         methods=['post', 'delete'],
