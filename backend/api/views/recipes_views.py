@@ -18,7 +18,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import filters, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 
@@ -59,17 +59,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
         elif self.request.method == 'GET':
             return RecipeSerializer
 
-    @action(
-        detail=True,
-        methods=['post', 'delete'],
-        permission_classes=[IsAuthenticated]
-    )
-    def favorite(self, request, id):
-        if request.method == 'POST':
-            return self.add_to(Favorite, request.user, id=id)
-        else:
-            return self.delete_from(Favorite, request.user, id=id)
+class FavoriteView(APIView): 
+    def delete(self, request, id): 
+        return delete(request, id, Favorite) 
 
+    def post(self, request, id): 
+        return post(request, id, Favorite) 
 
 class ShoppingCardView(APIView):
     def get(self, request):
